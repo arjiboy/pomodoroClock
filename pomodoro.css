@@ -1,0 +1,29 @@
+*{
+	margin: 0;
+	padding:0;
+
+}
+body{
+	font-size: 100%;
+	background: grey;
+	display: flex;
+	height: 90vh;
+	justify-content: center;
+	align-items: center;
+}
+#container{
+	display: flex;
+	flex:1;
+	flex-wrap: wrap;
+	max-width: 85vw;
+}
+#break, #work{
+	flex-basis: 50%;
+	text-align: center;
+}
+
+#visual{
+	flex-basis:100%;
+	text-align: center;
+	border: 1px solid black;
+}
