@@ -3,8 +3,8 @@ var state = {
 	current: true,
 	msTime: 0,
 	break: 5,
-	work: 1,
-	visual: 1
+	work: 25,
+	visual: 25
 }
 
 function render(){
@@ -73,7 +73,6 @@ document.getElementById('start').addEventListener('click',function(){
 	})
 
 	var n = state.msTime === 0 ? (state.work * 60 * 1000) : state.msTime
-	console.log(n)
 	countdown(n)
 	cdInterval = setInterval(function(){
 		if (state.running){
@@ -84,12 +83,14 @@ document.getElementById('start').addEventListener('click',function(){
 				state.current = false
 				countdown(state.break * 60 * 1000)
 				document.getElementById('status').innerHTML = 'On Break'
+				alert('Hey! Time to take a break!')
 				window.open('https://www.youtube.com/watch?v=-vEs0zEl-PA')
 			}
 			else if (!state.current && state.msTime == 0){
 				state.current = true;
 				countdown(state.work * 60 * 1000)
 				document.getElementById('status').innerHTML = 'Work Session'
+				alert('Hey! Time to take work now!')
 				window.open('https://www.youtube.com/watch?v=-vEs0zEl-PA')
 			}
 		}
