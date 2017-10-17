@@ -8,21 +8,29 @@
 </head>
 <body>
 	<div id="container">
+		<header>
+			<h1>Pomodoro Clock</h1>
+		</header>
+		
 		<section id="break">
+			<h4>Break Length</h4>
 			<h2 id="time">0</h2>
-			<button class="btn" id="dec">-</button>
-			<button class="btn" id="inc">+</button>
+			<button class="btn pm" id="dec">-</button>
+			<button class="btn pm" id="inc">+</button>
 		</section>
 
 		<section id="work">
+			<h4>Session Length</h4>
 			<h2 id="time">0</h2>
-			<button class="btn" id="dec">-</button>
-			<button class="btn" id="inc">+</button>
+			<button class="btn pm" id="dec">-</button>
+			<button class="btn pm" id="inc">+</button>
 		</section>
 		
 		<section id="visual">
-			<h1>Session</h1>
+			<h1 id="status">Work Session</h1>
 			<h1 id="time">0</h1>
+			<button class="btn" id="start">Start</button>
+			<button class="btn" id="pause" disabled>Pause</button>
 		</section>
 	</div>
 	<script type="text/javascript" src="pomodoro.js"></script>

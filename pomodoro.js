@@ -1,15 +1,16 @@
 var state = {
-	current: 'work',
+	running: false,
+	current: true,
+	msTime: 0,
 	break: 5,
-	work: 25,
-	visual: 25,
-	msTime: ''
+	work: 1,
+	visual: 1
 }
 
-function render(n){
+function render(){
 	document.querySelector('#break #time').innerHTML = state.break;
 	document.querySelector('#work #time').innerHTML = state.work;
-	document.querySelector('#visual #time').innerHTML = n
+	document.querySelector('#visual #time').innerHTML = state.running === '' ? state.work : state.visual ;
 }
 
 function adjVal(operation,group){
@@ -30,39 +31,78 @@ function adjVal(operation,group){
 		}
 	}
 }
-
-function countdown(time){
+function displayTime(time){
 	var date = new Date();
+	var timeStr = '';
+
 	date.setTime(time)
-	var timeStr = (date.toTimeString()).split(" ")
+	timeStr = (date.toTimeString()).split(" ")
 	timeStr = (timeStr[0].split(":")).slice(1)
-	state.visual = timeStr.join(":")
-	render(state.visual);
-	state.msTime -= 1000
+	timeStr = timeStr.join(":")
+	return timeStr;
+}
+function countdown(equation){
+	state.msTime = equation;
+	state.visual = displayTime(state.msTime)
+	render();
 }
 
-render(state.work);
 
-var buttons = document.getElementsByClassName('btn')
-for (i=0;i < buttons.length;i++){
-	buttons[i].addEventListener('click',function(){
+render();
+
+var buttons = document.getElementsByClassName('pm')
+
+Array.prototype.map.call(buttons,function(n){
+	n.addEventListener('click',function(){
 		adjVal(event.target.id,event.target.parentElement.id)
-		render(state.work);
+		state.running = '';
+		state.msTime = 0;
+		render();
 	})
-}
-
-document.getElementById('visual').addEventListener('click',function(){
-	state.msTime = state.work * 60 * 1000;
-	var x = setInterval(function(){
-		countdown(state.msTime)
-	},1000)
-	if (state.msTime === 0){
-		clearInterval(x)	
-	}
 })
 
+	
+var cdInterval = '';
 
-//stop if 0
-//if 0 run break
-//disable buttons while running
-//pause if clicked
+document.getElementById('start').addEventListener('click',function(){
+	state.running = true
+	this.disabled = true;
+	document.getElementById('pause').disabled = false;
+	Array.prototype.map.call(buttons,function(n){
+		n.disabled = true
+	})
+
+	var n = state.msTime === 0 ? (state.work * 60 * 1000) : state.msTime
+	console.log(n)
+	countdown(n)
+	cdInterval = setInterval(function(){
+		if (state.running){
+			if (state.msTime > 0){
+				countdown(state.msTime - 1000);
+			}
+			else if(state.current && state.msTime == 0){
+				state.current = false
+				countdown(state.break * 60 * 1000)
+				document.getElementById('status').innerHTML = 'On Break'
+				window.open('https://www.youtube.com/watch?v=-vEs0zEl-PA')
+			}
+			else if (!state.current && state.msTime == 0){
+				state.current = true;
+				countdown(state.work * 60 * 1000)
+				document.getElementById('status').innerHTML = 'Work Session'
+				window.open('https://www.youtube.com/watch?v=-vEs0zEl-PA')
+			}
+		}
+	},1000)	
+})
+
+document.getElementById('pause').addEventListener('click',function(){
+	state.running = false;
+	this.disabled = true;
+	document.getElementById('start').disabled = false;
+	Array.prototype.map.call(buttons,function(n){
+		n.disabled = false
+	})
+	clearInterval(cdInterval)
+})
+
