@@ -47,10 +47,33 @@ function countdown(equation){
 	render();
 }
 
+function countdownFunc(){
+	if (state.running){
+		if (state.msTime > 0){
+			countdown(state.msTime - 1000);
+		}
+		else if(state.current && state.msTime == 0){
+			state.current = false
+			countdown(state.break * 60 * 1000)
+			document.getElementById('status').innerHTML = 'On Break'
+			alert('Hey! Time to take a break!')
+			window.open('https://www.youtube.com/watch?v=-vEs0zEl-PA')
+		}
+		else if (!state.current && state.msTime == 0){
+			state.current = true;
+			countdown(state.work * 60 * 1000)
+			document.getElementById('status').innerHTML = 'Work Session'
+			alert('Hey! Time to work now!')
+			window.open('https://www.youtube.com/watch?v=-vEs0zEl-PA')
+		}
+	}
+}
+
 
 render();
 
 var buttons = document.getElementsByClassName('pm')
+var cdInterval = '';
 
 Array.prototype.map.call(buttons,function(n){
 	n.addEventListener('click',function(){
@@ -62,7 +85,6 @@ Array.prototype.map.call(buttons,function(n){
 })
 
 	
-var cdInterval = '';
 
 document.getElementById('start').addEventListener('click',function(){
 	state.running = true
@@ -74,27 +96,8 @@ document.getElementById('start').addEventListener('click',function(){
 
 	var n = state.msTime === 0 ? (state.work * 60 * 1000) : state.msTime
 	countdown(n)
-	cdInterval = setInterval(function(){
-		if (state.running){
-			if (state.msTime > 0){
-				countdown(state.msTime - 1000);
-			}
-			else if(state.current && state.msTime == 0){
-				state.current = false
-				countdown(state.break * 60 * 1000)
-				document.getElementById('status').innerHTML = 'On Break'
-				alert('Hey! Time to take a break!')
-				window.open('https://www.youtube.com/watch?v=-vEs0zEl-PA')
-			}
-			else if (!state.current && state.msTime == 0){
-				state.current = true;
-				countdown(state.work * 60 * 1000)
-				document.getElementById('status').innerHTML = 'Work Session'
-				alert('Hey! Time to take work now!')
-				window.open('https://www.youtube.com/watch?v=-vEs0zEl-PA')
-			}
-		}
-	},1000)	
+
+	cdInterval = setInterval(countdownFunc,1000)	
 })
 
 document.getElementById('pause').addEventListener('click',function(){
